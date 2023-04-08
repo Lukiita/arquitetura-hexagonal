@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"log"
 
 	"github.com/Lukiita/go-hexagonal/src/application"
 	_ "github.com/mattn/go-sqlite3"
@@ -35,6 +36,7 @@ func (p *ProductDb) Save(product application.IProduct) (application.IProduct, er
 	if rows == 0 {
 		_, err := p.create(product)
 		if err != nil {
+			log.Fatalf(err.Error())
 			return nil, err
 		}
 	} else {
@@ -51,6 +53,7 @@ func (p *ProductDb) create(product application.IProduct) (application.IProduct, 
 
 	stmt, err := p.db.Prepare(`INSERT INTO products(id, name, price, status) VALUES (?, ?, ?, ?)`)
 	if err != nil {
+		log.Fatalf(err.Error())
 		return nil, err
 	}
 
